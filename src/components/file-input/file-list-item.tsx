@@ -2,6 +2,7 @@ import { formatBytes } from "@/utils/format-bytes";
 import { CheckCircle2, Trash2, UploadCloud } from "lucide-react";
 import { Button } from "../button";
 import { tv, VariantProps } from "tailwind-variants";
+import { useFileInput } from "./root";
 
 const fileListItem = tv({
   slots: {
@@ -39,6 +40,12 @@ export type FileListItemProps = VariantProps<typeof fileListItem> & {
 
 export const FileListItem = ({ name, size, state }: FileListItemProps) => {
   const { container, icon, deleteButton } = fileListItem({ state });
+
+  const { onFileDelete } = useFileInput();
+
+  const handleDeleteFile = () => {
+    onFileDelete(name);
+  };
 
   return (
     <div className={container()}>
@@ -92,7 +99,12 @@ export const FileListItem = ({ name, size, state }: FileListItemProps) => {
       {state === "complete" ? (
         <CheckCircle2 className="w-5 h-5 text-white fill-violet-600" />
       ) : (
-        <Button type="button" variant="ghost" className={deleteButton()}>
+        <Button
+          type="button"
+          variant="ghost"
+          className={deleteButton()}
+          onClick={handleDeleteFile}
+        >
           <Trash2 className="w-5 h-5" />
         </Button>
       )}
